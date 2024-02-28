@@ -1,1 +1,1 @@
-web: gunicorn --chdir ./protfolio protfolio.wsgi --log-file -
+web: gunicorn protfolio.wsgi
