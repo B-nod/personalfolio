@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 from environ import environ
+
+import django_heroku
 import dj_database_url
+
 
 
 
@@ -101,28 +104,42 @@ WSGI_APPLICATION = 'protfolio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if IS_HEROKU_APP:
-    # In production on Heroku the database configuration is derived from the `DATABASE_URL`
-    # environment variable by the dj-database-url package. `DATABASE_URL` will be set
-    # automatically by Heroku when a database addon is attached to your Heroku app. See:
-    # https://devcenter.heroku.com/articles/provisioning-heroku-postgres
-    # https://github.com/jazzband/dj-database-url
-    DATABASES_URl = {
-        "default": dj_database_url.config(
-            conn_max_age=600,
-            conn_health_checks=True,
-            ssl_require=True,
-        ),
+DATABASES = {
+    'default':{
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'Name':'',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST':'',
+        'PORT': '5432'
     }
-else:
-    # When running locally in development or in CI, a sqlite database file will be used instead
-    # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
-    DATABASES_URL = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+    
+}
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
+# if IS_HEROKU_APP:
+#     # In production on Heroku the database configuration is derived from the `DATABASE_URL`
+#     # environment variable by the dj-database-url package. `DATABASE_URL` will be set
+#     # automatically by Heroku when a database addon is attached to your Heroku app. See:
+#     # https://devcenter.heroku.com/articles/provisioning-heroku-postgres
+#     # https://github.com/jazzband/dj-database-url
+#     DATABASES_URl = {
+#         "default": dj_database_url.config(
+#             # conn_max_age=600,
+#             # conn_health_checks=True,
+#             # ssl_require=True,
+#         ),
+#     }
+# else:
+#     # When running locally in development or in CI, a sqlite database file will be used instead
+#     # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
+#     DATABASES_URL = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
 
 # DATABASES = {
 #     'default': {
@@ -168,10 +185,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
 
+django_heroku.settings(locals())
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
