@@ -120,8 +120,7 @@ if IS_HEROKU_APP:
             'PASSWORD': 'f6c84dac247fe124311bcdace34134eec54c1eb940ff8f599018e8d4627a16f3',
             'HOST': 'ec2-35-169-9-79.compute-1.amazonaws.com',
             'PORT': '5432'
-        }
-        
+        }   
     }
 else:
      DATABASES = {
