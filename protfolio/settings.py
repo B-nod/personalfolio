@@ -31,7 +31,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 env = environ.Env()
 
+
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
+
+if READ_DOT_ENV_FILE:
+    # OS environment variables take precedence over variables from .env
+    env.read_env(str(".env"))
 
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
@@ -104,6 +109,8 @@ WSGI_APPLICATION = 'protfolio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# environ.Env.read_env()
+
 if IS_HEROKU_APP:
     DATABASES = {
         'default':{
@@ -111,7 +118,7 @@ if IS_HEROKU_APP:
             'Name': env('DATABASE_NAME'),
             'USER': env('DATABASE_USER'),
             'PASSWORD': env('DATABASE_PASS'),
-            'HOST':env('DATABASE_HOST'),
+            'HOST': env('DATABASE_HOST'),
             'PORT': '5432'
         }
         
