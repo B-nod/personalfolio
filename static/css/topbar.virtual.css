@@ -324,7 +324,11 @@
   overflow: hidden;
 }
 
-
+.page-portfolio
+{
+  background-color: #171925;
+  color: #fff;
+}
 .page-client {
   background-color: #171925;
   color: #fff;

@@ -57,4 +57,11 @@ class Client(models.Model):
 
      def __str__(self):
         return self.name
+     
+class Project(models.Model):
+    title = models.CharField(max_length=200, null=True)
+    image = models.FileField(upload_to='static/uploads', null=True)
+    link = models.URLField(max_length=200, null=True)
+    
+
       

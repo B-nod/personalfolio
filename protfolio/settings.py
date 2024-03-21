@@ -40,7 +40,7 @@ if READ_DOT_ENV_FILE:
 
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
-    default="django-insecure-nf1(%5*ubymm9@%tju*^0^jy&+j#1gdl$x_ac&=@5_a(+enxpq",
+    default="django-insecure-nf1(%5*ubymm9@%tju*^0^jy&+j#1gdl$x_ac&=@5_a(+enxpq"
 )
 
 
@@ -109,59 +109,46 @@ WSGI_APPLICATION = 'protfolio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# environ.Env.read_env()
-
-if IS_HEROKU_APP:
-    DATABASES = {
-        'default':{
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'Name': 'ddpb2bndvgsbcl',
-            'USER': 'qdgwhoufkopfrf',
-            'PASSWORD': 'f6c84dac247fe124311bcdace34134eec54c1eb940ff8f599018e8d4627a16f3',
-            'HOST': 'ec2-35-169-9-79.compute-1.amazonaws.com',
-            'PORT': '5432'
-        }   
-    }
-else:
-     DATABASES = {
+# File: core/settings.py
+...
+DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE'  : 'django.db.backends.mysql', 
+        'NAME'    : env("DATABASE_NAME"),                 
+        'USER'    : env("DATABASE_USER"),                     
+        'PASSWORD': env("DATABASE_PASSWORD"),              
+        'HOST'    : env("DATABASE_HOST"),                
+        'PORT'    : env("DATABASE_PORT"),
+        'OPTIONS':{
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
+...
 
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+# environ.Env.read_env()
 
 # if IS_HEROKU_APP:
-#     # In production on Heroku the database configuration is derived from the `DATABASE_URL`
-#     # environment variable by the dj-database-url package. `DATABASE_URL` will be set
-#     # automatically by Heroku when a database addon is attached to your Heroku app. See:
-#     # https://devcenter.heroku.com/articles/provisioning-heroku-postgres
-#     # https://github.com/jazzband/dj-database-url
-#     DATABASES_URl = {
-#         "default": dj_database_url.config(
-#             # conn_max_age=600,
-#             # conn_health_checks=True,
-#             # ssl_require=True,
-#         ),
+#     DATABASES = {
+#         'default':{
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'Name': 'ddpb2bndvgsbcl',
+#             'USER': 'qdgwhoufkopfrf',
+#             'PASSWORD': 'f6c84dac247fe124311bcdace34134eec54c1eb940ff8f599018e8d4627a16f3',
+#             'HOST': 'ec2-35-169-9-79.compute-1.amazonaws.com',
+#             'PORT': '5432'
+#         }   
 #     }
 # else:
-#     # When running locally in development or in CI, a sqlite database file will be used instead
-#     # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
-#     DATABASES_URL = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": BASE_DIR / "db.sqlite3",
-#         }
-#     }
-
-# DATABASES = {
+#      DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+# db_from_env = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -204,6 +191,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
+
+# DJANGO ADMIN
+# ---------------------------------------------------------------------------
+DJANGO_ADMIN = {
+    'EMAIL': env.str('DJANGO_ADMIN_EMAIL', default='admin@admin.com'),
+    'PASSWORD': env.str('DJANGO_ADMIN_PASSWORD', default='root1234')
+}
 
 django_heroku.settings(locals())
 # Default primary key field type
